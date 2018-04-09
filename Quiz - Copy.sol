@@ -23,18 +23,6 @@ contract Quiz {
 	mapping(address => bool)   public player_ansered ;
 
 	event logAnswer(address bettor);
-	event logTest(address sender);
-
-	// ******************************
-	// FUNCTIONS FOR Test
-	// ******************************
-
-	function test() public {
-		emit logTest(msg.sender);
-	}
-
-
-
 	
 	// ******************************
 	// FUNCTIONS FOR PLAYERS

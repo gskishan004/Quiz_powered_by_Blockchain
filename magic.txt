@@ -20,13 +20,16 @@ npm install solc  // to complile the above
 ---------------------------------
 node
 Web3 = require('web3')
-web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+web3.eth.accounts
+// * if the above does not give any accounts try reinstalling web3 using below commands :
+npm uninstall web3
+npm install web3@0.20.1 --save
 
-web3.eth.accounts // check accounts - to check everything is working till here
 
 // complile the contract
 ---------------------------------
-code = fs.readFileSync('Voting.sol').toString()
+code = fs.readFileSync('Quiz.sol').toString()
 solc = require('solc')
 compiledCode = solc.compile(code)
 
@@ -34,12 +37,12 @@ compiledCode = solc.compile(code)
 Deploying the contract
 ---------------------------------------------------------------
 
-abiDefinition = JSON.parse(compiledCode.contracts[':Voting'].interface)
-VotingContract = web3.eth.contract(abiDefinition)
-byteCode = compiledCode.contracts[':Voting'].bytecode
-deployedContract = VotingContract.new(['House1','House2','House3', 'House4'],{data: byteCode, from: web3.eth.accounts[0], gas: 4700000})
+abiDefinition = JSON.parse(compiledCode.contracts[':Quiz'].interface)
+QuizContract = web3.eth.contract(abiDefinition)
+byteCode = compiledCode.contracts[':Quiz'].bytecode
+deployedContract = QuizContract.new({from: web3.eth.accounts[0], gas:1})
 deployedContract.address
-contractInstance = VotingContract.at(deployedContract.address)
+contractInstance = QuizContract.at(deployedContract.address)
 
 Interacting with contract
 ---------------------------------------------------------------
