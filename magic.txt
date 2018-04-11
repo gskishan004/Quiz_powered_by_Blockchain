@@ -1,6 +1,7 @@
----------------------------------------------------------------
-Magicical bundle of strings to get you contract up and running 
----------------------------------------------------------------
+***************************************************************
+Magicical bundle get your contract up and running using node 
+***************************************************************
+***************************************************************
 
 #Using nodeJS console for entire process 
 
@@ -56,3 +57,13 @@ Interacting with contract
 '0x3da069a09577514f2baaa11bc3015a16edf26aad28dffbcd126bde2e71f2b76f'
 > contractInstance.totalVotesFor.call('Rama').toLocaleString()
 '3'
+
+
+***************************************************************
+Magicical bundle get your contract up and running using Truffle 
+***************************************************************
+***************************************************************
+
+truffle init
+truffle compile
+truffle migrate --network development
