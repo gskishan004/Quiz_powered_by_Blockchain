@@ -67,3 +67,23 @@ Magicical bundle get your contract up and running using Truffle
 truffle init
 truffle compile
 truffle migrate --network development
+
+--------------------------
+Solutions to common errors 
+--------------------------
+
+*if the above commands opens truffle js then use below command and try again:
+	set PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JSE;.WSF;.WSH;.MSC
+
+*if there is error : Error: Attempting to run transaction which calls a contract function, but recipient address ..
+	delete the .json files under build/contracts/. Then the next run of truffle migrate no longer fails.
+
+*VM Exception while processing transaction: revert
+	check contract address
+
+*Error: VM Exception while processing transaction: revert
+	fix the ABI defination 
+
+
+Metamask - PWD
+qwerty1234

@@ -3,34 +3,21 @@
 //---------------------------------------------------------------------
 
 var contractInstance;
-var contractAdd = '0x141b27fcb81398649c3172d7af55c7e8b2025c81';
+var contractAdd = '0x622d88e2ba9a36b57409ac1721b81de761f2bb4d';
+var web3;
+var account;
 
-
-
-// Initialize
-function initialize(address) {
-    
-    fs              = require("fs"),
-    code            = fs.readFileSync('Quiz.sol').toString()
-    solc            = require('solc')
-    compiledCode    = solc.compile(code)
-
-
-    abiDefinition = JSON.parse(compiledCode.contracts[':Quiz'].interface)
-    VotingContract = web3.eth.contract(abiDefinition)
-    byteCode = compiledCode.contracts[':Quiz'].bytecode
-    deployedContract = QuizContract.new({from: address, gas: 4700000})
-    deployedContract.address
-    contractInstance = QuizContract.at(deployedContract.address)
-    console.log(code , contractInstance.address);
-
+//Initialize contract instance
+function initializeContractInstance(){
+    abi = JSON.parse('[ { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "player_answered", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_option", "type": "int256[]" }, { "name": "_bet_amt", "type": "uint256" } ], "name": "save_player_answer", "outputs": [ { "name": "returnValue", "type": "int256" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "find_winners", "outputs": [ { "name": "winner", "type": "address[]" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_correct_option", "type": "int256[]" } ], "name": "set_answers", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "answers", "outputs": [ { "name": "bet_amt", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "get_player_answer", "outputs": [ { "name": "sender", "type": "address" }, { "name": "option", "type": "int256[]" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "sender", "type": "address" } ], "name": "logTest", "type": "event" } ]')
+    VotingContract = web3.eth.contract(abi);
+    contractInstance = VotingContract.at(contractAdd);
 }
-
 
 
 //validate data
 function validateData(add,q1,q2){
-    if (add.length ==0 || q1.length ==0 || q2.length ==0){
+    if (add.length ==0 || q1 ==0 || q2 ==0){
         alert("Please validate all the input fields");
         return 0;
     }
@@ -57,16 +44,12 @@ window.onload = function() {
     account = accounts[0];
     
    
-    document.getElementById("contractAddress").value = contractAdd;
+    document.getElementById("contractAddress").innerHTML = "Contract @ "+ contractAdd;
     document.getElementById("userAddress").value = account;
 
-    
-    abi = JSON.parse('[ { "constant": false, "inputs": [], "name": "get_questions", "outputs": [ { "name": "question", "type": "bytes32[]" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_question", "type": "bytes32[]" } ], "name": "set_questions", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "find_winners", "outputs": [ { "name": "winner", "type": "address[]" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_option", "type": "bytes32[]" }, { "name": "_bet_amt", "type": "uint256" } ], "name": "save_player_answer", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "answers", "outputs": [ { "name": "bet_amt", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_correct_option", "type": "bytes32[]" } ], "name": "set_answers", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "player_ansered", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "test", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "bettor", "type": "address" } ], "name": "logAnswer", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "sender", "type": "address" } ], "name": "logTest", "type": "event" } ]')
-    VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at(contractAdd);
-    contractInstance.test.call({from: web3.eth.accounts[0]})
 
-    
+    initializeContractInstance();
+        
   });
 
 
@@ -79,17 +62,29 @@ window.onload = function() {
 
     $("#submitButton").click(function() {
         var address = $("#userAddress").val();
-        var q1      = $("#q1").val();
-        var q2      = $("#q2").val();
+       
+        var q1       = document.getElementById("q1").selectedIndex;
+        var q2       = document.getElementById("q2").selectedIndex;
+
+        console.log("q1 and q2", q1,q2);
 
         var validateResult = validateData(address,q1,q2);
-        //console.log(address,q1,q2,validateResult);
 
-        initialize(address);
 
         if (validateResult == 1 ){
             var arr = new Array(q1,q2);
-            contractInstance.set_ansers(arr);
+            var events = contractInstance.save_player_answer(arr, 0, {from: account, gas:6721975});
+
+            console.log("Response after saving player anwser -> ", events);
+
+            var events = contractInstance.get_player_answer({from: account, gas:6721975});
+
+            console.log("Player Address                      -> ", events[0]);
+
+            console.log("Player Answers                      -> ", events[1]);
+            
         }
+
+
        
     });

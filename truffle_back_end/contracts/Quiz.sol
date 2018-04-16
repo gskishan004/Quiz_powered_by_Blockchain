@@ -3,15 +3,14 @@ contract Quiz {
     
 	address owner;
 
-    function Quiz() payable	{
+    function Quiz() public payable	{
     	owner = msg.sender;  
     }
     
-    bytes32[] private question;
-    bytes32[] private correct_option; 
+    int[] private correct_option; 
 
 	struct answer{
-		bytes32[] option;
+		int[] option;
 		uint256   bet_amt;
 	}
 	
@@ -20,61 +19,46 @@ contract Quiz {
 	address[] winnerList;
 
 	mapping(address => answer) public answers;
-	mapping(address => bool)   public player_ansered ;
+	mapping(address => bool)   public player_answered ;
 
-	event logAnswer(address bettor);
 	event logTest(address sender);
-
-	// ******************************
-	// FUNCTIONS FOR Test
-	// ******************************
-
-	function test() public {
-		emit logTest(msg.sender);
-	}
-
-
 
 	
 	// ******************************
 	// FUNCTIONS FOR PLAYERS
 	// ******************************
 
-	function save_player_answer( bytes32 []_option, uint256 _bet_amt) public {
+	function save_player_answer( int []_option, uint256 _bet_amt) public returns (int returnValue) {
 	
-	if( !player_ansered [msg.sender]){
+	if( !player_answered [msg.sender]){
 	    playerList.push(msg.sender);
+	    
+    	for (uint i=0; i< _option.length; i++){
+    	answers[msg.sender].option.push(_option[i]);
+    	}
+    	
+    	answers[msg.sender].bet_amt = _bet_amt;
+        player_answered [msg.sender] = true;
+        return 1;
+    	}
+    return 0;
 	}
 	
-	uint i;
-	for (i=0; i< correct_option.length; i++){
-	answers[msg.sender].option[i]  = _option[i];
-	}
-	
-	answers[msg.sender].bet_amt = _bet_amt;
-    player_ansered [msg.sender] = true;
-    
-	emit logAnswer(msg.sender);
-	}
+    function get_player_answer() public constant returns (address sender,int[] option){
+        return (msg.sender, answers[msg.sender].option);
+    }
     
 	
 	// ******************************    
     // FUNCTIONS FOR ADMIN
 	// ******************************
 	
-    function set_answers(bytes32[] _correct_option) public {
-        correct_option = _correct_option;
+    function set_answers(int[] _correct_option) public  {
+        for (uint i=0; i< _correct_option.length; i++){
+    	correct_option.push(_correct_option[i]);
+    	}
     }
     
-    function set_questions(bytes32[] _question) public{
-        for(uint i =0; i< _question.length; i++){
-            question.push(_question[i]);
-        }
-    }
-    
-    function get_questions() public returns (bytes32[] question) {
-        return question;
-    }
     
 	function find_winners() public returns (address[] winner){
 	    uint i;
