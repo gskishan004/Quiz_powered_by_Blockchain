@@ -20,6 +20,7 @@ contract Quiz {
 
 	mapping(address => answer) public answers;
 	mapping(address => bool)   public player_answered ;
+	mapping(address => bool)   public in_winnerList ;
 
 	event logTest(address sender);
 
@@ -60,18 +61,27 @@ contract Quiz {
     }
     
     
-	function find_winners() public returns (address[] winner){
+	function find_winners() public {
 	    uint i;
 	    uint j;
+	    uint number_of_correct_ans;
 	    for (i=0; i<playerList.length; i++){
+	        number_of_correct_ans = 0;
 	        for (j=0; j<correct_option.length; j++){
     	        if(answers[playerList[i]].option[j] == correct_option[j]){
-    	            winnerList.push(playerList[i]);
+    	            number_of_correct_ans+=1;
     	        }
-	        }     
+    	    }
+    	    if (number_of_correct_ans == correct_option.length){
+    	        if( !in_winnerList [playerList[i]]){
+    	        winnerList.push(playerList[i]);
+    	        }
+    	    }
 	    }
-	    return winnerList;
 	}
 	
+     function get_winners() public constant returns (address [] winners){
+        return (winnerList);
+    }
 
 }
