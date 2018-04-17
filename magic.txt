@@ -85,5 +85,14 @@ Solutions to common errors
 	fix the ABI defination 
 
 
+
+USING INFURA which is a hosted Ethereum node cluster that lets your users run your application without requiring them to set up their own Ethereum node or wallet. 
+
+
+npm install truffle-hdwallet-provider
+
+https://ropsten.infura.io/cB2USDTPPAJ523I9LSxP
+truffle migrate --network ropsten
+
 Metamask - PWD
 qwerty1234
