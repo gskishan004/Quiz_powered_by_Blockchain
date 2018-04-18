@@ -1,6 +1,7 @@
 var HDWalletProvider = require("truffle-hdwallet-provider");
+var infura_apikey = "cB2USDTPPAJ523I9LSxP";
 
-var mnemonic = "oblige side ritual warfare symbol focus tomato exercise frost best curious movie";
+var mnemonic = "increase amount image december opera drive neglect grain recipe husband number high";
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -12,13 +13,12 @@ module.exports = {
       network_id: "*" // Match any network id
     },
 
+ 
     ropsten: {
-      provider: function() {
-        return new HDWalletProvider(mnemonic, "https://ropsten.infura.io/cB2USDTPPAJ523I9LSxP")
-      },
-      gas: 6721975,
+      provider: new HDWalletProvider(mnemonic, "https://ropsten.infura.io/"+infura_apikey),
       network_id: 3
-    }   
+    }
+     
   } 
 
 };
