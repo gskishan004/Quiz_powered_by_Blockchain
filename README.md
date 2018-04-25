@@ -1,4 +1,9 @@
-# Quiz_powered_by_Blockchain
+# Quiz powered by Blockchain
 
-Refer to magic.txt 
+## Tasks : 
+- [x] Basic dApp on local machine.
+- [ ] Integrate with Cipher app.
+- [ ] Host the BE on testnet.
+- [x] Host the webapp (Using GitHub IO).
 
+### For how-to's or solution to common errors refer to magic.txt
